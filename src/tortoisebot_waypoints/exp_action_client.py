@@ -33,6 +33,11 @@ class WaypointClient:
 if __name__ == '__main__':
     try:
         waypoint_client = WaypointClient()
+        rospy.loginfo("Moving to waypoint: (0.5, 0.5, 0.0)")
         waypoint_client.send_goal(0.5, 0.5, 0.0)
+        rospy.loginfo("Moving to waypoint: (0.25, 0.25, 0.0)")
+        waypoint_client.send_goal(0.25, 0.25, 0.0)
+        rospy.loginfo("Moving to waypoint: (-0.25, -0.25, 0.0)")
+        waypoint_client.send_goal(-0.25, -0.25, 0.0)
     except rospy.ROSInterruptException:
         pass
