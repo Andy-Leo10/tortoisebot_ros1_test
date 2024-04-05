@@ -21,14 +21,19 @@ class WaypointClient:
         goal = WaypointActionGoal()
         goal.position = Point(x, y, z)  # Set your target waypoint here
 
+        # Define a feedback callback
+        def feedback_cb(feedback):
+            rospy.loginfo('Feedback: %s' % feedback)
         # Send the goal to the action server
-        self.client.send_goal(goal)
+        self.client.send_goal(goal, feedback_cb=feedback_cb)
 
         # Wait for the server to finish performing the action
         self.client.wait_for_result()
 
         # Log the result
-        rospy.loginfo(self.client.get_result())
+        result1, result2 = self.client.get_result()
+        rospy.loginfo(result1)
+        rospy.loginfo(result2)
 
 if __name__ == '__main__':
     try:
