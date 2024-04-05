@@ -36,19 +36,27 @@ class WaypointClient:
         # Wait for the server to finish performing the action
         self.client.wait_for_result()
 
-        # Log the result
+        # Get the result of the action
         result = self.client.get_result()
         self.success_pos = result.success_pos
         self.success_yaw = result.success_yaw
-        rospy.loginfo("Result Pos: %s" % ("Success" if self.success_pos else "Failure"))
-        rospy.loginfo("Result Yaw: %s" % ("Success" if self.success_yaw else "Failure"))
+        # Log the result
+        # rospy.loginfo("Result Pos: %s" % ("Success" if self.success_pos else "Failure"))
+        # rospy.loginfo("Result Yaw: %s" % ("Success" if self.success_yaw else "Failure"))
 
 if __name__ == '__main__':
     try:
         waypoint_client = WaypointClient()
+        
         rospy.loginfo("Moving to waypoint: (0.5, 0.0, 0.0)")
         waypoint_client.send_goal(0.5, 0.0, 0.0)
+        rospy.loginfo("Result Pos: %s" % ("Success" if waypoint_client.get_result_pos() else "Failure"))
+        rospy.loginfo("Result Yaw: %s" % ("Success" if waypoint_client.get_result_yaw() else "Failure"))
+        
         rospy.loginfo("Moving to waypoint: (0.0, 0.5, 0.0)")
         waypoint_client.send_goal(0.0, 0.5, 0.0)
+        rospy.loginfo("Result Pos: %s" % ("Success" if waypoint_client.get_result_pos() else "Failure"))
+        rospy.loginfo("Result Yaw: %s" % ("Success" if waypoint_client.get_result_yaw() else "Failure"))
+        
     except rospy.ROSInterruptException:
         pass
