@@ -31,9 +31,9 @@ class WaypointClient:
         self.client.wait_for_result()
 
         # Log the result
-        result1, result2 = self.client.get_result()
-        rospy.loginfo(result1)
-        rospy.loginfo(result2)
+        result = self.client.get_result()
+        rospy.loginfo(result.success_pos)
+        rospy.loginfo(result.success_yaw)
 
 if __name__ == '__main__':
     try:
