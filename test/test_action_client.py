@@ -4,6 +4,11 @@ import rospy
 import actionlib
 from geometry_msgs.msg import Point
 from tortoisebot_waypoints.msg import WaypointActionAction, WaypointActionGoal
+import rosunit
+import unittest
+import rostest
+PKG = 'tortoisebot_waypoints'
+NAME = 'test_action_client'
 
 class WaypointClient:
     def __init__(self):
@@ -49,19 +54,22 @@ class WaypointClient:
         # rospy.loginfo("Result Pos: %s" % ("Success" if self.success_pos else "Failure"))
         # rospy.loginfo("Result Yaw: %s" % ("Success" if self.success_yaw else "Failure"))
 
+class TestWaypointClient(unittest.TestCase):
+    def setUp(self):
+        rospy.init_node('test_waypoint_client')
+        self.waypoint_client = WaypointClient()
+
+    def test_send_goal(self):
+        test_cases = [
+            ((0.5, 0.0, 0.0), True, True),
+            ((0.0, 0.5, 0.0), True, True),
+            # Add more test cases here as needed
+        ]
+
+        for args, expected_pos, expected_yaw in test_cases:
+            self.waypoint_client.send_goal(*args)
+            self.assertEqual(self.waypoint_client.get_result_pos(), expected_pos)
+            self.assertEqual(self.waypoint_client.get_result_yaw(), expected_yaw)
+
 if __name__ == '__main__':
-    try:
-        waypoint_client = WaypointClient()
-        
-        rospy.loginfo("Moving to waypoint: (0.5, 0.0, 0.0)")
-        waypoint_client.send_goal(0.5, 0.0, 0.0)
-        rospy.loginfo("Result Pos: %s" % ("Success" if waypoint_client.get_result_pos() else "Failure"))
-        rospy.loginfo("Result Yaw: %s" % ("Success" if waypoint_client.get_result_yaw() else "Failure"))
-        
-        rospy.loginfo("Moving to waypoint: (0.0, 0.5, 0.0)")
-        waypoint_client.send_goal(0.0, 0.5, 0.0)
-        rospy.loginfo("Result Pos: %s" % ("Success" if waypoint_client.get_result_pos() else "Failure"))
-        rospy.loginfo("Result Yaw: %s" % ("Success" if waypoint_client.get_result_yaw() else "Failure"))
-        
-    except rospy.ROSInterruptException:
-        pass
+    rostest.rosrun(PKG, NAME, TestWaypointClient)
