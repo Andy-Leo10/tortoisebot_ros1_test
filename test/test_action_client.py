@@ -54,21 +54,28 @@ class WaypointClient:
         # rospy.loginfo("Result Pos: %s" % ("Success" if self.success_pos else "Failure"))
         # rospy.loginfo("Result Yaw: %s" % ("Success" if self.success_yaw else "Failure"))
 
-class TestWaypointClient(unittest.TestCase):
+class TestWaypointClient1(unittest.TestCase):
     def setUp(self):
         self.waypoint_client = WaypointClient()
 
     def test_send_goal(self):
-        test_cases = [
-            ((0.5, 0.0, 0.0), True, True),
-            ((0.0, 0.5, 0.0), True, True),
-            # Add more test cases here as needed
-        ]
+        self.waypoint_client.send_goal(0.5, 0.0, 0.0)
+        rospy.loginfo("Result Pos: %s" % ("Success" if self.waypoint_client.get_result_pos() else "Failure"))
+        rospy.loginfo("Result Yaw: %s" % ("Success" if self.waypoint_client.get_result_yaw() else "Failure"))
+        self.assertEqual(self.waypoint_client.get_result_pos(), True)
+        self.assertEqual(self.waypoint_client.get_result_yaw(), True)
 
-        for args, expected_pos, expected_yaw in test_cases:
-            self.waypoint_client.send_goal(*args)
-            self.assertEqual(self.waypoint_client.get_result_pos(), expected_pos)
-            self.assertEqual(self.waypoint_client.get_result_yaw(), expected_yaw)
+class TestWaypointClient2(unittest.TestCase):
+    def setUp(self):
+        self.waypoint_client = WaypointClient()
+
+    def test_send_goal(self):
+        self.waypoint_client.send_goal(0.0, 0.5, 0.0)
+        rospy.loginfo("Result Pos: %s" % ("Success" if self.waypoint_client.get_result_pos() else "Failure"))
+        rospy.loginfo("Result Yaw: %s" % ("Success" if self.waypoint_client.get_result_yaw() else "Failure"))
+        self.assertEqual(self.waypoint_client.get_result_pos(), True)
+        self.assertEqual(self.waypoint_client.get_result_yaw(), True)
 
 if __name__ == '__main__':
-    rostest.rosrun(PKG, NAME, TestWaypointClient)
+    rostest.rosrun(PKG, NAME, TestWaypointClient1)
+    rostest.rosrun(PKG, NAME, TestWaypointClient2)
