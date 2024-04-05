@@ -82,4 +82,5 @@ if __name__ == '__main__':
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestWaypointClient1))
     suite.addTest(unittest.makeSuite(TestWaypointClient2))
-    rostest.rosrun(PKG, NAME, test_suite=suite)
+    # rostest.rosrun(PKG, NAME, test_suite=suite)
+    unittest.TextTestRunner().run(suite)
