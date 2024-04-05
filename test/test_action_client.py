@@ -77,5 +77,9 @@ class TestWaypointClient2(unittest.TestCase):
         self.assertEqual(self.waypoint_client.get_result_yaw(), True)
 
 if __name__ == '__main__':
-    rostest.rosrun(PKG, NAME, TestWaypointClient1)
-    rostest.rosrun(PKG, NAME, TestWaypointClient2)
+    # rostest.rosrun(PKG, NAME, TestWaypointClient1)
+    # rostest.rosrun(PKG, NAME, TestWaypointClient2)
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestWaypointClient1))
+    suite.addTest(unittest.makeSuite(TestWaypointClient2))
+    rostest.rosrun(PKG, NAME, test_suite=suite)

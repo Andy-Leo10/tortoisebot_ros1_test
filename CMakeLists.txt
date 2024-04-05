@@ -208,3 +208,7 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 catkin_add_nosetests(test)
+
+add_custom_target(run_tests_custom
+  COMMAND /usr/bin/nosetests3 -P --process-timeout=120 --where=${CMAKE_SOURCE_DIR}/test --with-xunit --xunit-file=${CMAKE_BINARY_DIR}/test_results/nosetests-test.xml
+)
