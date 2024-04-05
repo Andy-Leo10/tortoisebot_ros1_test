@@ -56,7 +56,6 @@ class WaypointClient:
 
 class TestWaypointClient(unittest.TestCase):
     def setUp(self):
-        rospy.init_node('test_waypoint_client')
         self.waypoint_client = WaypointClient()
 
     def test_send_goal(self):
