@@ -209,7 +209,9 @@ include_directories(
 ## Add folders to be run by python nosetests
 catkin_add_nosetests(test)
 
+# this is optional, is for setting a custom timeout
+# to run: catkin_make run_tests_custom
 add_custom_target(run_tests_custom
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/test_results
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/test_results/tortoisebot_waypoints
   COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_BINARY_DIR}/test_results /usr/bin/nosetests3 -P --process-timeout=63 --where=${CMAKE_SOURCE_DIR}/tortoisebot_waypoints/test --with-xunit --xunit-file=nosetests-test.xml
 )
