@@ -3,7 +3,7 @@
 import rospy
 import time
 import actionlib
-from course_web_dev_ros.msg import WaypointActionFeedback, WaypointActionResult, WaypointActionAction
+from tortoisebot_waypoints.msg import WaypointActionFeedback, WaypointActionResult, WaypointActionAction
 from geometry_msgs.msg import Twist, Point
 from std_msgs.msg import Empty
 from nav_msgs.msg import Odometry
@@ -33,8 +33,8 @@ class WaypointActionClass(object):
 
     def __init__(self):
         # creates the action server
-        self._as = actionlib.SimpleActionServer("tortoisebot_as", WaypointActionAction, self.goal_callback, False)
-        self._as.start()
+        self.action_server_ = actionlib.SimpleActionServer("tortoisebot_as", WaypointActionAction, self.goal_callback, False)
+        self.action_server_.start()
 
         # define a loop rate
         self._rate = rospy.Rate(25)
@@ -79,10 +79,10 @@ class WaypointActionClass(object):
             rospy.loginfo("Desired Yaw: %s" % str(desired_yaw))
             rospy.loginfo("Error Yaw: %s" % str(err_yaw))
             # logic goes here
-            if self._as.is_preempt_requested():
+            if self.action_server_.is_preempt_requested():
                 # cancelled
                 rospy.loginfo("The goal has been cancelled/preempted")
-                self._as.set_preempted()
+                self.action_server_.set_preempted()
                 success = False
             elif math.fabs(err_yaw) > self._yaw_precision:
                 # fix yaw
@@ -104,7 +104,7 @@ class WaypointActionClass(object):
             # send feedback
             self._feedback.position = self._position
             self._feedback.state = self._state
-            self._as.publish_feedback(self._feedback)
+            self.action_server_.publish_feedback(self._feedback)
 
             # loop rate
             self._rate.sleep()
@@ -115,11 +115,20 @@ class WaypointActionClass(object):
         twist_msg.angular.z = 0
         self._pub_cmd_vel.publish(twist_msg)
 
-        # return success
+        # return success - result
         if success:
-            self._result.success = True
-            self._as.set_succeeded(self._result)
+            # check the final position
+            self._result.success_pos = False if err_pos > self._dist_precision else True
+            # check the final yaw - it will pass because it is no controlled at the end
+            self._result.success_yaw = False if math.fabs(err_yaw) > self._yaw_precision*10 else True
+            self.action_server_.set_succeeded(self._result)
 
+            # Log the results
+            rospy.loginfo("Final Position Error: %.2f - Allowed: %.2f" % (err_pos, self._dist_precision))
+            rospy.loginfo("Final Yaw Error: %.2f - Allowed: %.2f" % (math.fabs(err_yaw), self._yaw_precision))
+            rospy.loginfo("Success Position: %s" % ("true" if self._result.success_pos else "false"))
+            rospy.loginfo("Success Yaw: %s" % ("true" if self._result.success_yaw else "false"))
+            
 if __name__ == '__main__':
     rospy.init_node('tortoisebot_as')
     WaypointActionClass()
