@@ -41,16 +41,15 @@ cd simulation_ws/;catkin_make run_tests
 ```
 launch test
 ```
-rostest tortoisebot_waypoints TEST_FILE --reuse-master
+rostest tortoisebot_waypoints waypoints_test.test --reuse-master
 ```
-check summary
+check log
 ```shell
-colcon test-result --test-result-base build/tortoisebot_waypoints
+vim /home/user/simulation_ws/build/test_results/tortoisebot_waypoints/nosetests-test.xml
 ```
 clean tests
-```
-rm -r ~/ros2_ws/build/tortoisebot_waypoints/test_results
-rm -r ~/ros2_ws/build/tortoisebot_waypoints/Testing
+```shell
+rm -r /home/user/simulation_ws/build/test_results/tortoisebot_waypoints
 ```
 
 ## RESULTS
