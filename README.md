@@ -41,11 +41,11 @@ cd simulation_ws/;catkin_make run_tests
 ```
 launch test
 ```
-rostest tortoisebot_waypoints waypoints_test.test --reuse-master
+rostest --text tortoisebot_waypoints waypoints_test.test --reuse-master
 ```
 check log
 ```shell
-vim /home/user/simulation_ws/build/test_results/tortoisebot_waypoints/nosetests-test.xml
+vim /home/user/.ros/test_results/tortoisebot_waypoints/rostest-test_waypoints_test.xml
 ```
 clean tests
 ```shell
@@ -53,10 +53,10 @@ rm -r /home/user/simulation_ws/build/test_results/tortoisebot_waypoints
 ```
 
 ## RESULTS
-> **test-pass:** 
+> [!NOTE] test-pass:
 tests pass correctly if the goal is reached before and before timeout
 ![test-pass](pictures/ros1_pass.png)
 
-> **test-fail:** 
+> [!CAUTION] test-fail:
 tests don't pass correctly if the goal is not reached or due to timeout
 ![test-fail](pictures/ros1_fail.png)

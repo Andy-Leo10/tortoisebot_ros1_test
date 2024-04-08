@@ -62,8 +62,8 @@ class TestWaypointClient1(unittest.TestCase):
         self.waypoint_client.send_goal(0.5, 0.0, 0.0)
         rospy.loginfo("Result Pos: %s" % ("Success" if self.waypoint_client.get_result_pos() else "Failure"))
         rospy.loginfo("Result Yaw: %s" % ("Success" if self.waypoint_client.get_result_yaw() else "Failure"))
-        self.assertEqual(self.waypoint_client.get_result_pos(), True)
-        self.assertEqual(self.waypoint_client.get_result_yaw(), True)
+        self.assertEqual(self.waypoint_client.success_pos, True)
+        self.assertEqual(self.waypoint_client.success_yaw, True)
 
 class TestWaypointClient2(unittest.TestCase):
     def setUp(self):
@@ -77,10 +77,9 @@ class TestWaypointClient2(unittest.TestCase):
         self.assertEqual(self.waypoint_client.get_result_yaw(), True)
 
 if __name__ == '__main__':
-    # rostest.rosrun(PKG, NAME, TestWaypointClient1)
-    # rostest.rosrun(PKG, NAME, TestWaypointClient2)
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestWaypointClient1))
-    suite.addTest(unittest.makeSuite(TestWaypointClient2))
-    # rostest.rosrun(PKG, NAME, test_suite=suite)
-    unittest.TextTestRunner().run(suite)
+    rostest.rosrun(PKG, NAME, 'test_action_client')
+    '''
+    this function expects the name of a Python module that contains the test cases
+    not the name of a specific test case or test class
+    You should pass the name of your test file (without the .py extension) as the 3rd argument 
+    '''
